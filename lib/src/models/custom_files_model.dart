@@ -50,7 +50,7 @@ class CustomFileModel {
     return CustomFileModel(
       status: map['status'] != null
           ? Status.fromJson(
-              jsonDecode(map['status']),
+              map['status'],
             )
           : null,
       metadata: map['metadata'] != null
