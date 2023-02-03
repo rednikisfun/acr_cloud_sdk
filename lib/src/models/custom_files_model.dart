@@ -11,7 +11,7 @@ class CustomFileModel {
   /// Response metadata
   CustomFileMetadata? metadata;
 
-  String? resultType;
+  int? resultType;
   CustomFileModel({
     this.status,
     this.metadata,
@@ -21,7 +21,7 @@ class CustomFileModel {
   CustomFileModel copyWith({
     Status? status,
     CustomFileMetadata? metadata,
-    String? resultType,
+    int? resultType,
   }) {
     return CustomFileModel(
       status: status ?? this.status,
