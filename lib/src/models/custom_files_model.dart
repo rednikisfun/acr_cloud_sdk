@@ -85,7 +85,7 @@ class CustomFileModel {
 
 class CustomFileMetadata {
   /// Custom uploaded file fields
-  Map<String, dynamic>? customFiles;
+  List<dynamic>? customFiles;
 
   /// ACRCloud unique identifier
   String? acrid;
@@ -106,7 +106,7 @@ class CustomFileMetadata {
   });
 
   CustomFileMetadata copyWith({
-    Map<String, dynamic>? customFiles,
+    List<dynamic>? customFiles,
     String? acrid,
     String? title,
     String? audioId,
@@ -145,7 +145,7 @@ class CustomFileMetadata {
 
   factory CustomFileMetadata.fromMap(Map<String, dynamic> map) {
     return CustomFileMetadata(
-      customFiles: Map<String, dynamic>.from(map['custom_files']),
+      customFiles: List<dynamic>.from(map['custom_files']),
       acrid: map['acrid'],
       title: map['title'],
       audioId: map['audio_id'],
@@ -168,7 +168,7 @@ class CustomFileMetadata {
     if (identical(this, other)) return true;
 
     return other is CustomFileMetadata &&
-        mapEquals(other.customFiles, customFiles) &&
+        listEquals(other.customFiles, customFiles) &&
         other.acrid == acrid &&
         other.title == title &&
         other.audioId == audioId &&
