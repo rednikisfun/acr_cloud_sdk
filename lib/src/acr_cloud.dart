@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'models/custom_files_model.dart';
 import 'models/song_model.dart';
 
 /// Recognition mode
@@ -20,10 +22,10 @@ enum ACRCloudRecMode {
   both,
 
   ///query remote db and saving recording fingerprint when offline.
-  advance_remote,
+  advanceRemote,
 
   /// default mode
-  default_mode
+  defaultMode
 }
 
 /// ACRCloudClient is the main class of this SDK. It provides functions of configuration management,
@@ -31,13 +33,13 @@ enum ACRCloudRecMode {
 ///
 class AcrCloudSdk {
   static const MethodChannel _channel =
-      const MethodChannel('plugins.chizi.tech/acr_cloud_sdk');
+      MethodChannel('plugins.chizi.tech/acr_cloud_sdk');
 
   static const EventChannel _resultChannel =
-      const EventChannel('plugins.chizi.tech/acr_cloud_sdk.result');
+      EventChannel('plugins.chizi.tech/acr_cloud_sdk.result');
 
   static const EventChannel _timeChannel =
-      const EventChannel('plugins.chizi.tech/acr_cloud_sdk.time');
+      EventChannel('plugins.chizi.tech/acr_cloud_sdk.time');
 
   /// Fires whenever a song's time is recognized
   /// returns data as ```double```
@@ -56,6 +58,9 @@ class AcrCloudSdk {
   ///
   Stream<SongModel> get songModelStream =>
       resultStream.map((e) => SongModel.fromJson(e));
+
+  Stream<CustomFileModel> get customFileModelStream =>
+      resultStream.map((e) => CustomFileModel.fromJson(e));
 
   /// You should initilize the AcrCloudSdk instance with this function.
   ///
@@ -85,7 +90,7 @@ class AcrCloudSdk {
     int recorderConfigChannels = 1,
     bool isVolumeCallback = true,
     bool setLog = true,
-    ACRCloudRecMode recMode = ACRCloudRecMode.default_mode,
+    ACRCloudRecMode recMode = ACRCloudRecMode.defaultMode,
   }) async {
     try {
       var status = await Permission.microphone.status;
@@ -101,18 +106,19 @@ class AcrCloudSdk {
           Permission.storage,
         ].request();
         return await init(
-            host: host,
-            accessKey: accessKey,
-            accessSecret: accessSecret,
-            hostAuto: hostAuto,
-            accessKeyAuto: accessKeyAuto,
-            accessSecretAuto: accessSecretAuto,
-            recorderConfigRate: recorderConfigRate,
-            recorderConfigChannels: recorderConfigChannels,
-            requestTimeout: requestTimeout,
-            isVolumeCallback: isVolumeCallback,
-            setLog: setLog,
-            recMode: recMode);
+          host: host,
+          accessKey: accessKey,
+          accessSecret: accessSecret,
+          hostAuto: hostAuto,
+          accessKeyAuto: accessKeyAuto,
+          accessSecretAuto: accessSecretAuto,
+          recorderConfigRate: recorderConfigRate,
+          recorderConfigChannels: recorderConfigChannels,
+          requestTimeout: requestTimeout,
+          isVolumeCallback: isVolumeCallback,
+          setLog: setLog,
+          recMode: recMode,
+        );
       } else {
         return await _channel.invokeMethod(
           'init',
